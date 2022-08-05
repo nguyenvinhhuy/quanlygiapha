@@ -1,0 +1,54 @@
+version: '3.7'
+services:
+  db:
+    container_name: database
+    image: mysql:8.0
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: 'quanlygiapha'
+      MYSQL_ROOT_USER: 'root'
+      MYSQL_ROOT_PASSWORD: "123456"
+    networks:
+      - myapp
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+  app:
+    build: 
+      context: .
+      dockerfile: ./docker/Dockerfile
+    container_name: laravel
+    image: 'giapha'
+    ports:
+      - "9000:80"
+    networks:
+      - myapp
+    volumes:
+      - ./:/var/www/html
+    links:
+      - db
+
+  vuejs:
+    image: vue-ci-image
+    build: 
+      context: .
+      dockerfile: ./client/Dockerfile
+    container_name: client
+    working_dir: /var/www
+    environment:
+      - NODE_ENV=dev
+    networks:
+      - myapp
+    volumes:
+      - ./client/vue-client:/var/www
+    depends_on:
+      - "app"   
+    command: bash -c "npm install node-sass cross-env@latest && chmod -R u+x /var/www/node_modules && npm run dev"
+    ports:
+      - "3000:3000"
+    # restart: always
+
+networks:
+  myapp:
+    driver: bridge
