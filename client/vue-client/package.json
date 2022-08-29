@@ -8,13 +8,25 @@
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --host 0.0.0.0",
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "hot": "mix watch --hot"
   },
   "dependencies": {
+    "@websanova/vue-auth": "^4.1.13",
+    "axios": "^0.27.2",
+    "bootstrap": "^4.6.0",
+    "bootstrap-vue": "^2.21.2",
+    "cors": "^2.8.5",
     "cross-env": "^7.0.3",
+    "js-cookie": "^3.0.1",
+    "laravel-mix": "^6.0.49",
     "node-sass": "^7.0.1",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-axios": "^3.4.1",
+    "vue-route": "^1.5.1",
+    "vue-router": "^3.5.4",
+    "vuelidate": "^0.7.7",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -66,6 +78,29 @@
   "engines": {
     "node": ">= 6.0.0",
     "npm": ">= 3.0.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended",
+      "@vue/typescript"
+    ],
+    "rules": {
+      "vue/script-indent": [
+        "error",
+        4,
+        {
+          "baseIndent": 1
+        }
+      ]
+    },
+    "parserOptions": {
+      "parser": "typescript-eslint-parser"
+    }
   },
   "browserslist": [
     "> 1%",

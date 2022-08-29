@@ -27,7 +27,7 @@ Route::group(['middleware' => 'apilog'], function ($router) {
     Route::post('login', [AuthController::class,'login'])->name('login');
     Route::get('hello', [HelloController::class,'hello'])->name('hello');
 
-    Route::group(['middleware' => 'auth'], function ($router) { 
+    Route::group(['middleware' => 'auth'], function ($router) {
         Route::post('auth/logout', [AuthController::class,'logout'])->name('logout');
         Route::post('auth/refresh', [AuthController::class,'refresh'])->name('refresh');
         Route::post('auth/me', [AuthController::class,'me'])->name('me');

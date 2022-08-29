@@ -15,7 +15,7 @@ services:
     volumes:
       - ./docker/mysql:/var/lib/mysql
   app:
-    build: 
+    build:
       context: .
       dockerfile: ./docker/Dockerfile
     container_name: laravel
@@ -31,19 +31,20 @@ services:
 
   vuejs:
     image: vue-ci-image
-    build: 
+    build:
       context: .
       dockerfile: ./client/Dockerfile
     container_name: client
     working_dir: /var/www
     environment:
       - NODE_ENV=dev
+      - CHOKIDAR_USEPOLLING=true
     networks:
       - myapp
     volumes:
       - ./client/vue-client:/var/www
     depends_on:
-      - "app"   
+      - "app"
     command: bash -c "npm install node-sass cross-env@latest && chmod -R u+x /var/www/node_modules && npm run dev"
     ports:
       - "3000:3000"

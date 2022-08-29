@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -25,7 +25,7 @@ class AuthController extends Controller
           'password' => bcrypt($request->get('password')),
           'role_id' => $request->get('role_id'),
         ]);
-        
+
         return response()->json([
             'status'=> 200,
             'message'=> 'User created successfully',
@@ -34,9 +34,12 @@ class AuthController extends Controller
     }
     // -----------------------------------------------------------------------
     public function login(Request $request){
-        $credentials = $request->only('email', bcrypt('password'));
-        $user = User::where('email', $credentials['email'])->first();
-        if (! $token = JWTAuth::fromUser($user)) {
+        // $credentials = $request->only('email', bcrypt('password'));
+        // $user = User::where('email', $credentials['email'])->first();
+        // if (! $token = JWTAuth::fromUser($user)) {
+        //     return response()->json(['error' => 'Unauthorized'], 401);
+        $credentials = request(['email', 'password']);
+        if (! $token = auth('api')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -54,14 +57,14 @@ class AuthController extends Controller
     }
     // -----------------------------------------------------------------------
     public function refresh(){
-        return $this->respondWithToken(JWTAuth::refresh());
+        return $this->respondWithToken(auth('api')->refresh());
     }
     // -----------------------------------------------------------------------
     protected function respondWithToken($token){
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => JWTAuth::factory()->getTTL() * 60
+            'expires_in' => auth('api')->factory()->getTTL() * 60
         ]);
     }
     public function index()
